@@ -192,15 +192,14 @@ export class DataGridDemoService extends SohoDataGridService {
     console.warn(a.text());
   }
 
-  loadEmployeeDetails = function (response, term, gridArgs) {
-    setTimeout(() => {
-      response(
-        this.http.get('http://dummy.restapiexample.com/api/v1/employees').subscribe(
-          (employeesList: Array<any>) => {
-            for (const employee of employeesList) {
-              this.employees.push({ label: employee.id, value: employee.id });
-            }
-          }));
-    }, 1000);
-  };
+  loadEmployeeDetails = ((response, term, gridArgs) => {
+    this.http.get('http://dummy.restapiexample.com/api/v1/employees').subscribe(
+      (employeesList: Array<any>) => { response(this.extractEmployeesList(employeesList)); });
+  });
+
+  extractEmployeesList(data: Array<any>) {
+    for (const employee of data) {
+      this.employees.push({ label: employee.id, value: employee.id });
+    }
+  }
 }
